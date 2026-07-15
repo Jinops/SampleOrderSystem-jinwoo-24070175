@@ -30,4 +30,26 @@
 
 ## 2. Phase별 세부 계획
 
-_다음 단계에서 작성_
+### Phase 0 — Model 계층
+
+목표: `Sample`/`Order`/`OrderStatus`와 JSON 기반 CRUD를 완성해, 이후 모든 Controller가 딛고 설 수 있는 공통 기반을 만든다.
+
+- 브랜치: `feature/model-layer`
+- 작업 순서 (TDD, Red → Green 반복):
+  1. `models/enums.py` — `OrderStatus` Enum(`RESERVED`/`REJECTED`/`PRODUCING`/`CONFIRMED`/`RELEASE`) 정의. 로직이 없으므로 별도 테스트 없이 바로 작성.
+  2. `models/sample.py` — `Sample` dataclass(`sample_id`/`name`/`avg_process_time`/`yield_rate`/`stock`) 정의 + `data/samples.json` 대상 CRUD 함수(`list_samples`, `get_sample`, `save_sample`, `search_samples`).
+     - 테스트 먼저 (`tests/test_sample_model.py`, `tmp_path` fixture로 실제 `data/`와 분리): 등록 후 조회 시 값이 그대로 나오는지, 재고 수정 후 다시 읽으면 갱신된 값이 보이는지, 존재하지 않는 ID 조회 시 처리.
+  3. `models/order.py` — `Order` dataclass(`order_id`/`sample_id`/`customer_name`/`quantity`/`status`/`created_at`) 정의 + `data/orders.json` 대상 CRUD 함수(`list_orders`, `get_order`, `save_order`).
+     - 테스트 먼저 (`tests/test_order_model.py`): 생성 시 `status`가 `RESERVED`로 저장/복원되는지, `created_at`이 ISO 8601로 직렬화·역직렬화되는지, 상태값 변경 후 재조회 시 반영되는지.
+  4. 파일이 없을 때(첫 실행) 빈 리스트로 시작하는 경우에 대한 테스트 + 구현.
+- 커밋 단위 (기능 단위로 잘게, `CLAUDE.md` 규칙):
+  1. `[test] Sample 모델 CRUD 테스트 작성`
+  2. `[feat] Sample 모델 및 JSON CRUD 구현`
+  3. `[test] Order 모델 CRUD 테스트 작성`
+  4. `[feat] Order 모델 및 JSON CRUD 구현`
+  5. (필요 시) `[refact] Model 계층 정리`
+- 완료 기준: `pytest tests/test_sample_model.py tests/test_order_model.py`가 전부 통과, `feature/model-layer`를 `main`에 merge.
+
+### Phase 1~5
+
+_Model 계층 완료 후 이어서 작성 (기능별 Controller+View 6개, 메뉴 통합, Harness, CleanCode)_
