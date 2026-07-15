@@ -148,7 +148,18 @@
 
 ### Phase 6 — 출고 처리 (Controller + View)
 
-_Phase 1~5와 같은 형식으로 이어서 작성_
+목표: `CONFIRMED` 주문을 선택해 출고 처리한다 (`prd.md` 5.6, `spec.md` 4.4).
+
+- 브랜치: `feature/출고처리`
+- 작업 순서 (TDD):
+  1. `controllers/shipment_controller.py` — `list_confirmed_orders()`, `ship_order(order_id)`. `ship_order`는 대상 주문이 `CONFIRMED`가 아니면 에러, 맞으면 `RELEASE`로 전환.
+     - 테스트 먼저 (`tests/test_shipment.py`).
+  2. `views/shipment_view.py` — `CONFIRMED` 목록 표시 후 번호 선택 → 출고 처리. TDD 없이 구현 후 수동 확인.
+- 커밋 단위:
+  1. `[test] Phase 6: 출고 처리 컨트롤러 테스트 작성`
+  2. `[feat] Phase 6: 출고 처리 컨트롤러 구현`
+  3. `[feat] Phase 6: 출고 처리 콘솔 View 구현`
+- 완료 기준: `pytest tests/test_shipment.py` 통과, 콘솔에서 `[6] 출고 처리` 메뉴가 정상 동작, `feature/출고처리`를 `main`에 merge.
 
 ### Phase 7 — 메인 메뉴 통합
 
