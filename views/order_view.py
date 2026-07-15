@@ -1,9 +1,14 @@
 from controllers.order_controller import create_order
+from controllers.sample_controller import is_duplicate_sample_id
 from views.formatting import colorize
 
 
 def _handle_create_order():
-    sample_id = input("시료 ID > ").strip()
+    sample_id = input("시료 ID 입력 (예시: S-001) > ").strip()
+    if not is_duplicate_sample_id(sample_id):
+        print(f"등록되지 않은 시료 ID입니다: {sample_id}")
+        return
+
     customer_name = input("고객명 > ").strip()
     try:
         quantity = int(input("주문 수량 > ").strip())
