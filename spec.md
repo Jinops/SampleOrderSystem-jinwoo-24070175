@@ -84,7 +84,10 @@ RELEASE     # 출고 완료
 ### 4.2 생산 라인 (`controllers.production`)
 
 - 생산 큐는 `collections.deque`로 구현, **FIFO**로 처리한다.
-- 실 생산량: `actual_qty = ceil(shortage / yield_rate)`
+- **실 생산량 계산 — 수율을 고려한 최소 보장 생산**: 부족분(`shortage`)만큼의 정상품을 확보하려면, 수율(불량 발생 가능성)을 감안해 그보다 더 많은 수량을 생산 지시해야 한다.
+  - 예: 부족분이 100개이고 수율이 0.9라면, `100 / 0.9 ≈ 111.1`이므로 112개를 생산 지시해야 (수율상) 100개의 정상품이 보장된다.
+  - `actual_qty = ceil(shortage / yield_rate)`
+  - 단, 본 시스템의 생산 시뮬레이션에서는 실제 불량 발생 로직을 두지 않는다 — 즉 `actual_qty`로 생산 지시한 수량은 수율과 무관하게 **전량 정상품으로 생산**된다. 그 결과 재고에는 부족분(`shortage`)을 초과하는 여분이 남게 된다.
 - 총 생산 시간: `total_time = avg_process_time * actual_qty`
 - 생산 완료 처리 시:
   - 해당 시료의 재고를 `actual_qty`만큼 증가시킨 뒤, 주문 수량만큼 다시 차감한다 (즉 재고에는 초과 생산분만 남는다).
