@@ -231,3 +231,4 @@
   2. `[refact] Phase 11: 각 View가 formatting.py를 사용하도록 정리`
   3. `[refact] Phase 11: main.py 헤더/메뉴 레이아웃 정리`
 - 완료 기준: `main.py` 전체 메뉴를 한 바퀴 돌며 상태값 색상 표시와 정돈된 표가 정상 출력되는지 확인, `pytest tests/` 전체 통과, `feature/사용성개선`을 `main`에 merge.
+- **완료됨** — ANSI 색상(RESERVED 노랑/CONFIRMED 초록/PRODUCING 청록/RELEASE 보라/REJECTED 빨강, 여유 초록/부족 노랑/고갈 빨강)과 공통 테이블 포맷을 6개 View에 전부 적용. `cat -v`로 ANSI 코드 정상 출력 및 정렬 확인. 겸사겸사 "생산 큐에 여러 건이 쌓여있을 때 순서대로 완료 처리되는지"를 검증하는 테스트도 추가(사용자 지적으로 발견된 커버리지 공백, 기존 구현이 이미 올바르게 동작함을 확인). 테스트 49개 전부 통과.
