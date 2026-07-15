@@ -17,6 +17,9 @@ class Order:
     quantity: int
     status: OrderStatus = OrderStatus.RESERVED
     created_at: datetime = field(default_factory=datetime.now)
+    shortage: int | None = None
+    actual_qty: int | None = None
+    production_started_at: datetime | None = None
 
 
 def _orders_path(data_dir: Path = DEFAULT_DATA_DIR) -> Path:
@@ -31,6 +34,11 @@ def _to_dict(order: Order) -> dict:
         "quantity": order.quantity,
         "status": order.status.value,
         "created_at": order.created_at.isoformat(),
+        "shortage": order.shortage,
+        "actual_qty": order.actual_qty,
+        "production_started_at": (
+            order.production_started_at.isoformat() if order.production_started_at else None
+        ),
     }
 
 
@@ -42,6 +50,13 @@ def _from_dict(data: dict) -> Order:
         quantity=data["quantity"],
         status=OrderStatus(data["status"]),
         created_at=datetime.fromisoformat(data["created_at"]),
+        shortage=data.get("shortage"),
+        actual_qty=data.get("actual_qty"),
+        production_started_at=(
+            datetime.fromisoformat(data["production_started_at"])
+            if data.get("production_started_at")
+            else None
+        ),
     )
 
 

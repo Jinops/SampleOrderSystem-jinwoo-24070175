@@ -34,6 +34,16 @@ def test_재고가_부족하면_승인시_PRODUCING으로_전환되고_재고는
     assert get_sample("S-001", data_dir=tmp_path).stock == 50
 
 
+def test_재고가_부족하면_승인시_shortage와_actual_qty가_계산되어_저장된다(tmp_path):
+    # 주문 수량 200, 재고 50 -> 부족분 150, 수율 0.92 -> ceil(150/0.92) = 164
+    order = _setup(tmp_path, stock=50)
+
+    approved = approve_order(order.order_id, data_dir=tmp_path)
+
+    assert approved.shortage == 150
+    assert approved.actual_qty == 164
+
+
 def test_거절하면_REJECTED로_전환된다(tmp_path):
     order = _setup(tmp_path, stock=480)
 
