@@ -1,4 +1,5 @@
 from controllers.order_controller import create_order
+from views.formatting import colorize
 
 
 def _handle_create_order():
@@ -18,7 +19,7 @@ def _handle_create_order():
 
     print("예약 접수 완료.")
     print(f"주문번호   {order.order_id}")
-    print(f"현재 상태   {order.status.value}")
+    print(f"현재 상태   {colorize(order.status.value, order.status.value)}")
 
 
 def run():

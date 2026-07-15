@@ -1,10 +1,12 @@
 from controllers.order_controller import approve_order, list_reserved_orders, reject_order
+from views.formatting import colorize, print_table
 
 
 def _print_reserved_orders(orders):
-    print(f"{'번호':<6}{'주문번호':<22}{'고객':<20}{'시료ID':<10}{'수량':<8}")
-    for i, o in enumerate(orders, start=1):
-        print(f"{i:<6}{o.order_id:<22}{o.customer_name:<20}{o.sample_id:<10}{o.quantity:<8}")
+    headers = ["번호", "주문번호", "고객", "시료ID", "수량"]
+    widths = [6, 22, 20, 10, 8]
+    rows = [[i, o.order_id, o.customer_name, o.sample_id, o.quantity] for i, o in enumerate(orders, start=1)]
+    print_table(headers, rows, widths)
 
 
 def _handle_process():
@@ -24,10 +26,10 @@ def _handle_process():
 
     if decision == "Y":
         result = approve_order(order.order_id)
-        print(f"승인 완료. 상태: RESERVED -> {result.status.value}")
+        print(f"승인 완료. 상태: RESERVED -> {colorize(result.status.value, result.status.value)}")
     elif decision == "N":
         result = reject_order(order.order_id)
-        print(f"거절 완료. 상태: RESERVED -> {result.status.value}")
+        print(f"거절 완료. 상태: RESERVED -> {colorize(result.status.value, result.status.value)}")
     else:
         print("Y 또는 N만 입력 가능합니다.")
 

@@ -1,4 +1,5 @@
 from controllers.monitoring_controller import classify_sample_stock, count_orders_by_status
+from views.formatting import colorize, print_table
 
 
 def _handle_order_counts():
@@ -6,9 +7,10 @@ def _handle_order_counts():
     if not counts:
         print("집계할 주문이 없습니다.")
         return
-    print(f"{'상태':<12}{'건수':<6}")
-    for status, count in counts.items():
-        print(f"{status.value:<12}{count:<6}")
+    headers = ["상태", "건수"]
+    widths = [12, 6]
+    rows = [[colorize(status.value, status.value), count] for status, count in counts.items()]
+    print_table(headers, rows, widths)
 
 
 def _handle_stock_status():
@@ -16,9 +18,13 @@ def _handle_stock_status():
     if not statuses:
         print("등록된 시료가 없습니다.")
         return
-    print(f"{'시료명':<20}{'재고':<8}{'대기수량':<10}{'상태':<6}")
-    for s in statuses:
-        print(f"{s.sample.name:<20}{s.sample.stock:<8}{s.pending_quantity:<10}{s.level:<6}")
+    headers = ["시료명", "재고", "대기수량", "상태"]
+    widths = [20, 8, 10, 10]
+    rows = [
+        [s.sample.name, s.sample.stock, s.pending_quantity, colorize(s.level, s.level)]
+        for s in statuses
+    ]
+    print_table(headers, rows, widths)
 
 
 def run():
