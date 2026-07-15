@@ -3,7 +3,6 @@ from pathlib import Path
 from models.sample import DEFAULT_DATA_DIR, Sample, get_sample
 from models.sample import list_samples as _list_samples
 from models.sample import save_sample
-from models.sample import search_samples as _search_samples
 
 
 def register_sample(
@@ -35,4 +34,8 @@ def list_samples(data_dir: Path = DEFAULT_DATA_DIR) -> list[Sample]:
 
 
 def search_samples(keyword: str, data_dir: Path = DEFAULT_DATA_DIR) -> list[Sample]:
-    return _search_samples(keyword, data_dir=data_dir)
+    return [
+        s
+        for s in _list_samples(data_dir=data_dir)
+        if keyword in s.sample_id or keyword in s.name
+    ]
