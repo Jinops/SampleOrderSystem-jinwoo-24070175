@@ -86,9 +86,26 @@
   3. `[feat] Phase 2: 시료 주문 콘솔 View 구현`
 - 완료 기준: `pytest tests/test_order_controller.py` 통과, 콘솔에서 `[2] 시료 주문` 메뉴가 정상 동작, `feature/시료-주문`을 `main`에 merge.
 
-### Phase 3~6 — 나머지 4개 기능 (Controller + View)
+### Phase 3 — 주문 승인/거절 (Controller + View)
 
-_Phase 1/2와 같은 형식으로, 주문 승인/거절 → 모니터링 → 생산 라인 조회 → 출고 처리 순서로 하나씩 이어서 작성_
+목표: `RESERVED` 주문을 승인/거절 처리한다 (`prd.md` 5.3, `spec.md` 4.1).
+
+- 브랜치: `feature/주문-승인거절`
+- 작업 순서 (TDD):
+  1. `controllers/order_controller.py`에 함수 추가 — `approve_order(order_id)`, `reject_order(order_id)`.
+     - `approve_order`: 대상 주문이 `RESERVED`가 아니면 에러. 재고가 주문 수량 이상이면 재고 차감 후 `CONFIRMED`로 전환. 재고가 부족하면 재고는 그대로 두고 `PRODUCING`으로 전환 (실제 생산 처리는 Phase 5에서 다룸 — "생산 큐"는 별도 자료구조 없이 `status == PRODUCING`인 주문을 `created_at` 기준 FIFO로 조회하는 것으로 대체한다).
+     - `reject_order`: 대상 주문이 `RESERVED`가 아니면 에러. 즉시 `REJECTED`로 전환.
+     - 테스트 먼저 (`tests/test_order_approval.py`): 재고 충분 승인 시 CONFIRMED+재고 차감, 재고 부족 승인 시 PRODUCING(+재고 불변), 거절 시 REJECTED, RESERVED가 아닌 주문에 승인/거절 시도하면 에러.
+  2. `views/order_approval_view.py` — `RESERVED` 주문 목록을 보여주고 번호 선택 후 승인/거절(Y/N)을 입력받아 처리 결과를 출력. TDD 없이 구현 후 수동 확인.
+- 커밋 단위:
+  1. `[test] Phase 3: 주문 승인/거절 컨트롤러 테스트 작성`
+  2. `[feat] Phase 3: 주문 승인/거절 컨트롤러 구현`
+  3. `[feat] Phase 3: 주문 승인/거절 콘솔 View 구현`
+- 완료 기준: `pytest tests/test_order_approval.py` 통과, 콘솔에서 `[3] 주문 승인/거절` 메뉴가 정상 동작, `feature/주문-승인거절`을 `main`에 merge.
+
+### Phase 4~6 — 나머지 3개 기능 (Controller + View)
+
+_Phase 1~3과 같은 형식으로, 모니터링 → 생산 라인 조회 → 출고 처리 순서로 하나씩 이어서 작성_
 
 ### Phase 7 — 메인 메뉴 통합
 
