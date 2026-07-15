@@ -1,10 +1,11 @@
 from datetime import datetime
 from pathlib import Path
 
-from models.order import DEFAULT_DATA_DIR, Order
+from models.enums import OrderStatus
+from models.order import DEFAULT_DATA_DIR, Order, get_order
 from models.order import list_orders as _list_orders
 from models.order import save_order
-from models.sample import get_sample
+from models.sample import get_sample, save_sample
 
 
 def _generate_order_id(created_at: datetime, data_dir: Path) -> str:
@@ -39,3 +40,34 @@ def create_order(
 
 def list_orders(data_dir: Path = DEFAULT_DATA_DIR) -> list[Order]:
     return _list_orders(data_dir=data_dir)
+
+
+def _require_reserved_order(order_id: str, data_dir: Path) -> Order:
+    order = get_order(order_id, data_dir=data_dir)
+    if order is None:
+        raise ValueError(f"존재하지 않는 주문번호입니다: {order_id}")
+    if order.status != OrderStatus.RESERVED:
+        raise ValueError(f"RESERVED 상태의 주문만 처리할 수 있습니다: {order_id} ({order.status.value})")
+    return order
+
+
+def approve_order(order_id: str, data_dir: Path = DEFAULT_DATA_DIR) -> Order:
+    order = _require_reserved_order(order_id, data_dir)
+    sample = get_sample(order.sample_id, data_dir=data_dir)
+
+    if sample.stock >= order.quantity:
+        sample.stock -= order.quantity
+        save_sample(sample, data_dir=data_dir)
+        order.status = OrderStatus.CONFIRMED
+    else:
+        order.status = OrderStatus.PRODUCING
+
+    save_order(order, data_dir=data_dir)
+    return order
+
+
+def reject_order(order_id: str, data_dir: Path = DEFAULT_DATA_DIR) -> Order:
+    order = _require_reserved_order(order_id, data_dir)
+    order.status = OrderStatus.REJECTED
+    save_order(order, data_dir=data_dir)
+    return order
