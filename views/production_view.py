@@ -1,4 +1,5 @@
 from controllers.production_controller import complete_current_production, get_production_queue
+from views.formatting import colorize, print_table
 
 
 def _progress_bar(pct, width=10):
@@ -18,14 +19,19 @@ def _handle_view_queue():
 
     if len(queue) > 1:
         print("\n대기 중인 주문 (FIFO)")
-        for s in queue[1:]:
-            print(f"{s.order.order_id}  실생산량 {s.order.actual_qty}ea  예상 완료 {s.estimated_completion:%H:%M}")
+        headers = ["주문번호", "실생산량", "예상 완료"]
+        widths = [22, 12, 10]
+        rows = [
+            [s.order.order_id, f"{s.order.actual_qty}ea", f"{s.estimated_completion:%H:%M}"]
+            for s in queue[1:]
+        ]
+        print_table(headers, rows, widths)
 
 
 def _handle_complete():
     try:
         order = complete_current_production()
-        print(f"생산 완료 처리됨: {order.order_id} -> {order.status.value}")
+        print(f"생산 완료 처리됨: {order.order_id} -> {colorize(order.status.value, order.status.value)}")
     except ValueError as e:
         print(f"처리 실패: {e}")
 

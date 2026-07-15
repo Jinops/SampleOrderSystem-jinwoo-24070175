@@ -1,10 +1,12 @@
 from controllers.shipment_controller import list_confirmed_orders, ship_order
+from views.formatting import colorize, print_table
 
 
 def _print_confirmed_orders(orders):
-    print(f"{'번호':<6}{'주문번호':<22}{'고객':<20}{'시료ID':<10}{'수량':<8}")
-    for i, o in enumerate(orders, start=1):
-        print(f"{i:<6}{o.order_id:<22}{o.customer_name:<20}{o.sample_id:<10}{o.quantity:<8}")
+    headers = ["번호", "주문번호", "고객", "시료ID", "수량"]
+    widths = [6, 22, 20, 10, 8]
+    rows = [[i, o.order_id, o.customer_name, o.sample_id, o.quantity] for i, o in enumerate(orders, start=1)]
+    print_table(headers, rows, widths)
 
 
 def _handle_ship():
@@ -21,7 +23,7 @@ def _handle_ship():
 
     order = orders[int(choice) - 1]
     shipped = ship_order(order.order_id)
-    print(f"출고 처리 완료. 상태: CONFIRMED -> {shipped.status.value}")
+    print(f"출고 처리 완료. 상태: CONFIRMED -> {colorize(shipped.status.value, shipped.status.value)}")
 
 
 def run():

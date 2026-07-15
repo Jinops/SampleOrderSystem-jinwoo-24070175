@@ -30,19 +30,20 @@ def _print_header():
     total_stock = sum(s.stock for s in samples)
 
     print("=" * 60)
-    print("반도체 시료 생산주문관리 시스템")
+    print("  반도체 시료 생산주문관리 시스템")
     print("=" * 60)
     print(f"시스템 현황   {datetime.now():%Y-%m-%d %H:%M:%S}")
     print(f"등록 시료 {len(samples)}종     총 재고 {total_stock} ea")
     print(f"전체 주문 {len(orders)}건     생산라인 {len(queue)}건 대기")
+    print("-" * 60)
 
 
 def _print_menu():
-    print("-" * 60)
     print("[1] 시료 관리        [2] 시료 주문")
     print("[3] 주문 승인/거절   [4] 모니터링")
     print("[5] 생산라인 조회    [6] 출고 처리")
     print("[0] 종료")
+    print("-" * 60)
 
 
 def main():

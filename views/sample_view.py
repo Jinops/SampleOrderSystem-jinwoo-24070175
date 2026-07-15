@@ -4,15 +4,17 @@ from controllers.sample_controller import (
     register_sample,
     search_samples,
 )
+from views.formatting import print_table
 
 
 def _print_samples(samples):
     if not samples:
         print("등록된 시료가 없습니다.")
         return
-    print(f"{'ID':<8}{'시료명':<20}{'평균 생산시간':<14}{'수율':<8}{'재고':<8}")
-    for s in samples:
-        print(f"{s.sample_id:<8}{s.name:<20}{s.avg_process_time:<14}{s.yield_rate:<8}{s.stock:<8}")
+    headers = ["ID", "시료명", "평균 생산시간", "수율", "재고"]
+    widths = [8, 20, 14, 8, 8]
+    rows = [[s.sample_id, s.name, s.avg_process_time, s.yield_rate, s.stock] for s in samples]
+    print_table(headers, rows, widths)
 
 
 def _handle_register():
