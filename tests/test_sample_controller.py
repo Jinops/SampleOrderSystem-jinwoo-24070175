@@ -1,6 +1,11 @@
 import pytest
 
-from controllers.sample_controller import list_samples, register_sample, search_samples
+from controllers.sample_controller import (
+    is_duplicate_sample_id,
+    list_samples,
+    register_sample,
+    search_samples,
+)
 
 
 def test_정상_등록하면_목록에서_조회된다(tmp_path):
@@ -42,3 +47,13 @@ def test_ID로도_검색할_수_있다(tmp_path):
     result = search_samples("S-002", data_dir=tmp_path)
 
     assert [s.sample_id for s in result] == ["S-002"]
+
+
+def test_등록되지_않은_ID는_중복이_아니다(tmp_path):
+    assert is_duplicate_sample_id("S-001", data_dir=tmp_path) is False
+
+
+def test_이미_등록된_ID는_중복이다(tmp_path):
+    register_sample("S-001", "실리콘 웨이퍼-8인치", 0.5, 0.92, 480, data_dir=tmp_path)
+
+    assert is_duplicate_sample_id("S-001", data_dir=tmp_path) is True
