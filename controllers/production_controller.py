@@ -56,7 +56,16 @@ def complete_current_production(data_dir: Path = DEFAULT_DATA_DIR) -> Order:
         raise ValueError("생산 중인 주문이 없습니다.")
 
     order = queue[0]
+    if order.production_started_at is None:
+        raise ValueError("아직 생산이 시작되지 않았습니다. 먼저 생산라인 조회로 큐를 확인하세요.")
+
     sample = get_sample(order.sample_id, data_dir=data_dir)
+    total_time = sample.avg_process_time * order.actual_qty
+    elapsed_minutes = (datetime.now() - order.production_started_at).total_seconds() / 60
+    if elapsed_minutes < total_time:
+        remaining = total_time - elapsed_minutes
+        raise ValueError(f"아직 생산이 완료되지 않았습니다. 약 {remaining:.1f}분 더 필요합니다.")
+
     sample.stock += order.actual_qty
     sample.stock -= order.quantity
     save_sample(sample, data_dir=data_dir)
