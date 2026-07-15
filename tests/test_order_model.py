@@ -61,3 +61,27 @@ def test_동일_주문번호로_다시_저장하면_상태가_갱신된다(tmp_p
 
 def test_파일이_없으면_빈_목록을_반환한다(tmp_path):
     assert list_orders(data_dir=tmp_path) == []
+
+
+def test_shortage_actual_qty_production_started_at_기본값은_None이다(tmp_path):
+    order = _make_order()
+
+    assert order.shortage is None
+    assert order.actual_qty is None
+    assert order.production_started_at is None
+
+
+def test_생산_관련_필드가_저장_후_복원되어도_동일하다(tmp_path):
+    order = _make_order(
+        status=OrderStatus.PRODUCING,
+        shortage=120,
+        actual_qty=131,
+        production_started_at=datetime(2026, 4, 16, 10, 0, 0),
+    )
+    save_order(order, data_dir=tmp_path)
+
+    found = get_order("ORD-0001", data_dir=tmp_path)
+
+    assert found.shortage == 120
+    assert found.actual_qty == 131
+    assert found.production_started_at == datetime(2026, 4, 16, 10, 0, 0)
