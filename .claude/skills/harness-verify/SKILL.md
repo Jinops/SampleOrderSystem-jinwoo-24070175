@@ -30,5 +30,6 @@ description: Phase를 main에 merge하기 전, 문서-코드 정합성과 테스
 
 ## 언제 사용하는가
 
-- 각 Phase의 Action(구현)이 끝나고, `feature/*` 브랜치를 `main`에 merge하기 전.
+- 각 Phase의 Action(구현)이 끝나고, `feature/*` 브랜치를 `main`에 merge하기 전 실행하는 것이 원칙이다.
+- 다만 문구/레이아웃 수정처럼 아주 사소한 후속 개선이 연달아 여러 건 발생하는 경우, 비슷한 성격·규모의 작업을 묶어서 한 번에 검증해도 된다.
 - Phase 8(Harness 단계)에서는 지금까지의 모든 Phase에 대해 한 번 더 전체적으로 실행한다.
