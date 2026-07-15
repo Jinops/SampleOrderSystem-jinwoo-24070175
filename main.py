@@ -12,6 +12,7 @@ from views import (
     sample_view,
     shipment_view,
 )
+from views.formatting import print_section_header
 
 MENU_ACTIONS = {
     "1": sample_view.run,
@@ -29,9 +30,7 @@ def _print_header():
     queue = get_production_queue()
     total_stock = sum(s.stock for s in samples)
 
-    print("=" * 60)
-    print("  반도체 시료 생산주문관리 시스템")
-    print("=" * 60)
+    print_section_header("반도체 시료 생산주문관리 시스템")
     print(f"시스템 현황   {datetime.now():%Y-%m-%d %H:%M:%S}")
     print(f"등록 시료 {len(samples)}종     총 재고 {total_stock} ea")
     print(f"전체 주문 {len(orders)}건     생산라인 {len(queue)}건 대기")

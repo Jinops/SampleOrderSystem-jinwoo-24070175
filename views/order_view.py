@@ -1,6 +1,6 @@
 from controllers.order_controller import create_order
 from controllers.sample_controller import is_duplicate_sample_id
-from views.formatting import colorize
+from views.formatting import colorize, print_section_header
 
 
 def _handle_create_order():
@@ -29,7 +29,7 @@ def _handle_create_order():
 
 def run():
     while True:
-        print("\n<시료 주문>")
+        print_section_header("시료 주문")
         print("[1] 신규 주문   [0] 뒤로")
         choice = input("선택 > ").strip()
 
