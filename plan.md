@@ -211,3 +211,4 @@
   8. 거절(REJECTED) 케이스도 한 번 확인
 - 버그 발견 시 처리: 원인이 되는 계층(model/controller/view)에 TDD로 테스트를 먼저 추가(Red) → 수정(Green) → 커밋. 커밋 메시지는 `[fix] Phase 10: ...` 형식.
 - 완료 기준: 위 8개 시나리오가 `main.py` 상에서 모두 정상 동작하고, `pytest tests/` 전체가 통과.
+- **완료됨** — `main.py`로 시료 2종 등록 → 재고충분/부족 주문 승인(CONFIRMED/PRODUCING 분기) → 거절 → 생산 큐 FIFO 조회·진행률 → 생산완료(정상)/생산완료(시간 미충족 에러) → 모니터링(재고 부족/여유 분류) → 출고(RELEASE) 전체 흐름을 한 번에 실행. 최종 주문 상태(RELEASE/CONFIRMED/PRODUCING/REJECTED)와 재고값을 직접 조회해 계산이 모두 정확함을 확인. 새로 발견된 버그 없음 — 상세 내역은 `harness-log.md` 참고.
