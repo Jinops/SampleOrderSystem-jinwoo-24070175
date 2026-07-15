@@ -50,7 +50,7 @@ def _handle_search():
 
 def run():
     while True:
-        print("\n[1] 시료 관리")
+        print("\n<시료 관리>")
         print("[1] 시료 등록   [2] 시료 목록   [3] 시료 검색   [0] 뒤로")
         choice = input("선택 > ").strip()
 

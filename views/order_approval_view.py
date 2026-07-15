@@ -36,7 +36,7 @@ def _handle_process():
 
 def run():
     while True:
-        print("\n[3] 주문 승인/거절")
+        print("\n<주문 승인/거절>")
         print("[1] 승인 대기 목록 처리   [0] 뒤로")
         choice = input("선택 > ").strip()
 

@@ -24,7 +24,7 @@ def _handle_create_order():
 
 def run():
     while True:
-        print("\n[2] 시료 주문")
+        print("\n<시료 주문>")
         print("[1] 신규 주문   [0] 뒤로")
         choice = input("선택 > ").strip()
 

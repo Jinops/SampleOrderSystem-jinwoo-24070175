@@ -29,7 +29,7 @@ def _handle_stock_status():
 
 def run():
     while True:
-        print("\n[4] 모니터링")
+        print("\n<모니터링>")
         print("[1] 주문량 확인   [2] 재고량 확인   [0] 뒤로")
         choice = input("선택 > ").strip()
 
