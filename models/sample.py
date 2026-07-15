@@ -41,7 +41,3 @@ def save_sample(sample: Sample, data_dir: Path = DEFAULT_DATA_DIR) -> None:
     data_dir.mkdir(parents=True, exist_ok=True)
     with open(_samples_path(data_dir), "w", encoding="utf-8") as f:
         json.dump([asdict(s) for s in samples], f, ensure_ascii=False, indent=2)
-
-
-def search_samples(keyword: str, data_dir: Path = DEFAULT_DATA_DIR) -> list[Sample]:
-    return [s for s in list_samples(data_dir) if keyword in s.name]

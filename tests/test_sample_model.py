@@ -1,4 +1,4 @@
-from models.sample import Sample, get_sample, list_samples, save_sample, search_samples
+from models.sample import Sample, get_sample, list_samples, save_sample
 
 
 def test_새_시료를_저장하면_목록에서_조회된다(tmp_path):
@@ -32,15 +32,6 @@ def test_동일_ID로_다시_저장하면_기존_값이_갱신된다(tmp_path):
 
     samples = list_samples(data_dir=tmp_path)
     assert samples == [updated]
-
-
-def test_이름으로_시료를_검색할_수_있다(tmp_path):
-    save_sample(Sample("S-001", "실리콘 웨이퍼-8인치", 0.5, 0.92, 480), data_dir=tmp_path)
-    save_sample(Sample("S-002", "GaN 에피택셜-4인치", 0.3, 0.78, 220), data_dir=tmp_path)
-
-    result = search_samples("웨이퍼", data_dir=tmp_path)
-
-    assert [s.sample_id for s in result] == ["S-001"]
 
 
 def test_파일이_없으면_빈_목록을_반환한다(tmp_path):
