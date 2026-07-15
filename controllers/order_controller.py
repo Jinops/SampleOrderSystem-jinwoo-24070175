@@ -42,6 +42,10 @@ def list_orders(data_dir: Path = DEFAULT_DATA_DIR) -> list[Order]:
     return _list_orders(data_dir=data_dir)
 
 
+def list_reserved_orders(data_dir: Path = DEFAULT_DATA_DIR) -> list[Order]:
+    return [o for o in _list_orders(data_dir=data_dir) if o.status == OrderStatus.RESERVED]
+
+
 def _require_reserved_order(order_id: str, data_dir: Path) -> Order:
     order = get_order(order_id, data_dir=data_dir)
     if order is None:

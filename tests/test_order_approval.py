@@ -1,6 +1,11 @@
 import pytest
 
-from controllers.order_controller import approve_order, create_order, reject_order
+from controllers.order_controller import (
+    approve_order,
+    create_order,
+    list_reserved_orders,
+    reject_order,
+)
 from controllers.sample_controller import register_sample
 from models.enums import OrderStatus
 from models.sample import get_sample
@@ -51,3 +56,13 @@ def test_RESERVED가_아닌_주문을_거절하면_에러(tmp_path):
 
     with pytest.raises(ValueError):
         reject_order(order.order_id, data_dir=tmp_path)
+
+
+def test_RESERVED_주문_목록만_조회된다(tmp_path):
+    reserved = _setup(tmp_path, stock=480)
+    other = create_order("S-001", "SK하이닉스", 50, data_dir=tmp_path)
+    approve_order(other.order_id, data_dir=tmp_path)
+
+    result = list_reserved_orders(data_dir=tmp_path)
+
+    assert [o.order_id for o in result] == [reserved.order_id]
