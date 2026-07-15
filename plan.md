@@ -218,7 +218,16 @@
 목표: 기능은 다 갖춰졌으니, 콘솔 화면의 가독성/시각적 표현을 개선한다.
 
 - 브랜치: `feature/사용성개선`
-- 범위: _구체적인 개선 항목은 사용자와 논의 후 확정 예정_ (예: 재고 잔여율 progress bar, 상태값 색상 표시, 테이블 정렬/구분선 정리, 모니터링 화면에 막대그래프 형태 시각화 등 후보)
-- 단순 출력/포맷 개선이라 TDD 없이 구현 후 수동 확인 위주로 진행.
-- 커밋 단위: 개선 항목별로 잘게 나누어 커밋 (`[feat]`/`[chore]` + `Phase 11:` 접두).
-- 완료 기준: _확정 후 작성_
+- 확정된 범위 (사용자 선택): **① 상태값 강조 표시(색상/기호)**, **② 테이블/메뉴 레이아웃 정리**
+- 작업 순서:
+  1. `views/formatting.py` 공통 모듈 신설
+     - 주문 상태(RESERVED/CONFIRMED/PRODUCING/RELEASE/REJECTED)와 재고 상태(여유/부족/고갈)를 ANSI 색상으로 감싸는 `colorize(text, key)` 함수.
+     - 표 형태 출력을 일관된 폭/구분선으로 그려주는 `print_table(headers, rows, widths)` 함수.
+  2. 기존 5개 View(`sample_view`, `order_view`, `order_approval_view`, `monitoring_view`, `production_view`, `shipment_view`)에서 상태값 출력과 표 출력을 `formatting.py` 함수로 교체.
+  3. `main.py`의 헤더/메뉴 구분선도 동일한 스타일로 정리.
+- 단순 출력/포맷 개선이라 TDD 없이 구현 후 수동 확인 위주로 진행. 기존 pytest는 출력 포맷을 검사하지 않으므로 그대로 통과해야 함.
+- 커밋 단위:
+  1. `[feat] Phase 11: views/formatting.py 공통 색상/테이블 출력 모듈 구현`
+  2. `[refact] Phase 11: 각 View가 formatting.py를 사용하도록 정리`
+  3. `[refact] Phase 11: main.py 헤더/메뉴 레이아웃 정리`
+- 완료 기준: `main.py` 전체 메뉴를 한 바퀴 돌며 상태값 색상 표시와 정돈된 표가 정상 출력되는지 확인, `pytest tests/` 전체 통과, `feature/사용성개선`을 `main`에 merge.
