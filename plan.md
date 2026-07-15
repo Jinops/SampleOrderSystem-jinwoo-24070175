@@ -103,9 +103,26 @@
   3. `[feat] Phase 3: 주문 승인/거절 콘솔 View 구현`
 - 완료 기준: `pytest tests/test_order_approval.py` 통과, 콘솔에서 `[3] 주문 승인/거절` 메뉴가 정상 동작, `feature/주문-승인거절`을 `main`에 merge.
 
-### Phase 4~6 — 나머지 3개 기능 (Controller + View)
+### Phase 4 — 모니터링 (Controller + View)
 
-_Phase 1~3과 같은 형식으로, 모니터링 → 생산 라인 조회 → 출고 처리 순서로 하나씩 이어서 작성_
+목표: 주문량/재고량 현황을 확인하는 조회 전용 기능을 완성한다 (`prd.md` 5.4, `spec.md` 4.3).
+
+- 브랜치: `feature/모니터링`
+- 작업 순서 (TDD):
+  1. `controllers/monitoring_controller.py`:
+     - `count_orders_by_status()` — 전체 주문을 상태별(`RESERVED`/`CONFIRMED`/`PRODUCING`/`RELEASE`)로 집계. `REJECTED`는 제외.
+     - `classify_sample_stock()` — 시료별 현재 재고와 함께, 그 시료에 대해 아직 처리 중인 주문(`RESERVED`+`PRODUCING`) 수량 합계 대비 재고 수준을 `여유`/`부족`/`고갈` 3단계로 분류. 재고 0이면 무조건 `고갈`, 대기 수량 합이 재고보다 많으면 `부족`, 그 외 `여유`.
+     - 테스트 먼저 (`tests/test_monitoring.py`): 상태별 집계에서 REJECTED 제외 확인, 여유/부족/고갈 각 케이스.
+  2. `views/monitoring_view.py` — `[1] 주문량 확인 / [2] 재고량 확인 / [0] 뒤로` 하위 메뉴. TDD 없이 구현 후 수동 확인.
+- 커밋 단위:
+  1. `[test] Phase 4: 모니터링 컨트롤러 테스트 작성`
+  2. `[feat] Phase 4: 모니터링 컨트롤러 구현`
+  3. `[feat] Phase 4: 모니터링 콘솔 View 구현`
+- 완료 기준: `pytest tests/test_monitoring.py` 통과, 콘솔에서 `[4] 모니터링` 메뉴가 정상 동작, `feature/모니터링`을 `main`에 merge.
+
+### Phase 5~6 — 나머지 2개 기능 (Controller + View)
+
+_Phase 1~4와 같은 형식으로, 생산 라인 조회 → 출고 처리 순서로 하나씩 이어서 작성_
 
 ### Phase 7 — 메인 메뉴 통합
 
