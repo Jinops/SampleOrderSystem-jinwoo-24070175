@@ -1,5 +1,5 @@
 from controllers.shipment_controller import list_confirmed_orders, ship_order
-from views.formatting import colorize, print_table
+from views.formatting import colorize, print_section_header, print_table
 
 
 def _print_confirmed_orders(orders):
@@ -28,7 +28,7 @@ def _handle_ship():
 
 def run():
     while True:
-        print("\n<출고 처리>")
+        print_section_header("출고 처리")
         print("[1] 출고 가능 목록   [0] 뒤로")
         choice = input("선택 > ").strip()
 

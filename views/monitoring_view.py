@@ -1,5 +1,5 @@
 from controllers.monitoring_controller import classify_sample_stock, count_orders_by_status
-from views.formatting import colorize, print_table
+from views.formatting import colorize, print_section_header, print_table
 
 
 def _handle_order_counts():
@@ -29,7 +29,7 @@ def _handle_stock_status():
 
 def run():
     while True:
-        print("\n<모니터링>")
+        print_section_header("모니터링")
         print("[1] 주문량 확인   [2] 재고량 확인   [0] 뒤로")
         choice = input("선택 > ").strip()
 

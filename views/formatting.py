@@ -32,6 +32,12 @@ def _pad(text: str, width: int) -> str:
     return text + " " * max(0, width - _visible_len(text))
 
 
+def print_section_header(title: str, width: int = 60) -> None:
+    print("\n" + "=" * width)
+    print(f"  {title}")
+    print("=" * width)
+
+
 def print_table(headers: list[str], rows: list[list[str]], widths: list[int]) -> None:
     header_line = "".join(_pad(h, w) for h, w in zip(headers, widths))
     print(header_line)

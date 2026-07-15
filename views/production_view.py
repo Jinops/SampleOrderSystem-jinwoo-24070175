@@ -1,5 +1,5 @@
 from controllers.production_controller import complete_current_production, get_production_queue
-from views.formatting import colorize, print_table
+from views.formatting import colorize, print_section_header, print_table
 
 
 def _progress_bar(pct, width=10):
@@ -38,7 +38,7 @@ def _handle_complete():
 
 def run():
     while True:
-        print("\n<생산라인 조회>")
+        print_section_header("생산라인 조회")
         print("[1] 큐 조회   [2] 생산완료 처리   [0] 뒤로")
         choice = input("선택 > ").strip()
 
