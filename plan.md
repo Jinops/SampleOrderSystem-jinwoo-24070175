@@ -183,6 +183,7 @@
 - `plan-verify`: Phase 5~7의 계획 대비 실제 진행(브랜치/커밋/완료기준)을 확인 (Phase 0~4는 이미 한 차례 검증 완료, `harness-log.md` 참고).
 - 결과를 `harness-log.md`에 이어서 기록.
 - FAIL 항목이 있으면 Phase 9에서 정리한다.
+- **완료됨** — harness-verify에서 생산완료 처리가 시간 경과를 검증하지 않는 spec 위반(FAIL) 1건 발견 → `feature/생산완료-시간검증`에서 즉시 수정(TDD) 후 재검증 PASS. plan-verify(Phase 5~7)는 PASS. 상세 내역은 `harness-log.md` "2026-07-15 — Phase 5~7" 참고.
 
 ### Phase 9 — CleanCode 정리
 
@@ -192,3 +193,4 @@
 - 확인된 정리 대상: `models/sample.py`의 미사용 `search_samples` 함수 제거 (harness-log.md 2026-07-15 기록 참고).
 - Phase 8에서 새로 발견된 이슈가 있으면 함께 정리.
 - 정리 후 전체 테스트가 여전히 통과하는지 재확인.
+- **완료됨** — 미사용 `search_samples`(models/sample.py) 및 관련 테스트 제거(커밋 `b0177e6`). Phase 8에서 발견된 생산완료 버그는 별도 `[fix]`로 즉시 수정(위 Phase 8 참고). 전체 테스트 48개 통과 확인.
