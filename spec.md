@@ -132,3 +132,14 @@ RELEASE     # 출고 완료
 
 - 잘못된 메뉴 번호, 존재하지 않는 시료/주문 ID 입력 등은 예외를 발생시키지 않고 안내 메시지를 출력한 뒤 해당 메뉴를 다시 보여준다.
 - 수량 등 숫자 입력값 검증은 `views` 계층에서 1차로 수행한다.
+
+## 7. 테스트 전략
+
+- 테스트 프레임워크: **pytest**
+- 테스트 코드는 `tests/`에 두고, `models/`·`controllers/`의 구조를 그대로 미러링한다 (예: `tests/test_models.py`, `tests/test_order_controller.py`).
+- JSON 파일 read/write를 테스트할 때는 pytest의 `tmp_path` fixture로 임시 디렉토리를 사용해 실제 `data/` 파일을 건드리지 않는다.
+- 우선순위 테스트 대상:
+  - 주문 상태 전이 (RESERVED→CONFIRMED/PRODUCING/REJECTED, PRODUCING→CONFIRMED, CONFIRMED→RELEASE)
+  - 실 생산량 계산 (`ceil(shortage / yield_rate)`)
+  - 모니터링 재고 분류 기준 (여유/부족/고갈)
+  - JSON 저장소 CRUD (읽기/쓰기 시 데이터 정합성)
