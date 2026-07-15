@@ -5,6 +5,10 @@ from models.sample import list_samples as _list_samples
 from models.sample import save_sample
 
 
+def is_duplicate_sample_id(sample_id: str, data_dir: Path = DEFAULT_DATA_DIR) -> bool:
+    return get_sample(sample_id, data_dir=data_dir) is not None
+
+
 def register_sample(
     sample_id: str,
     name: str,
@@ -13,7 +17,7 @@ def register_sample(
     stock: int,
     data_dir: Path = DEFAULT_DATA_DIR,
 ) -> Sample:
-    if get_sample(sample_id, data_dir=data_dir) is not None:
+    if is_duplicate_sample_id(sample_id, data_dir=data_dir):
         raise ValueError(f"이미 등록된 시료 ID입니다: {sample_id}")
     if not (0 < yield_rate <= 1):
         raise ValueError(f"수율은 0 초과 1 이하여야 합니다: {yield_rate}")
