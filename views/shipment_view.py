@@ -28,7 +28,7 @@ def _handle_ship():
 
 def run():
     while True:
-        print("\n[6] 출고 처리")
+        print("\n<출고 처리>")
         print("[1] 출고 가능 목록   [0] 뒤로")
         choice = input("선택 > ").strip()
 

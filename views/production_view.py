@@ -38,7 +38,7 @@ def _handle_complete():
 
 def run():
     while True:
-        print("\n[5] 생산라인 조회")
+        print("\n<생산라인 조회>")
         print("[1] 큐 조회   [2] 생산완료 처리   [0] 뒤로")
         choice = input("선택 > ").strip()
 
