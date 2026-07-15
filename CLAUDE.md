@@ -20,6 +20,8 @@
 
 `[type] 커밋 내용` 형식을 따른다. 커밋 메시지 내용은 한글로 작성한다.
 
+**Phase가 존재하는 작업**(`plan.md`의 Phase 0, Phase 1 등에 속하는 작업)이라면 Phase 번호를 커밋 내용 앞에 명시한다: `[type] Phase N: 커밋 내용` (예: `[feat] Phase 0: Sample 모델 및 JSON CRUD 구현`).
+
 | type | 용도 |
 |---|---|
 | `[feat]` | 기능 추가 |
