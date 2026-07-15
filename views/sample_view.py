@@ -33,7 +33,7 @@ def _handle_list():
 
 
 def _handle_search():
-    keyword = input("검색어 > ").strip()
+    keyword = input("검색어 (ID 또는 시료명) > ").strip()
     _print_samples(search_samples(keyword))
 
 
