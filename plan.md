@@ -67,9 +67,28 @@
 - 완료 기준: `pytest tests/test_sample_controller.py` 통과, 콘솔에서 `[1] 시료 관리` 메뉴가 정상 동작, `feature/시료-관리`를 `main`에 merge.
 - **주의**: 이번 라운드는 구현(Action)까지만 진행하고 `main` merge는 보류한다 (사용자 지시).
 
-### Phase 2~6 — 나머지 5개 기능 (Controller + View)
+### Phase 2 — 시료 주문 (Controller + View)
 
-_Phase 1과 같은 형식으로, 시료 주문 → 주문 승인/거절 → 모니터링 → 생산 라인 조회 → 출고 처리 순서로 하나씩 이어서 작성_
+목표: 고객 요청을 받아 주문(예약)을 생성하는 기능을 완성한다 (`prd.md` 5.2).
+
+- 브랜치: `feature/시료-주문`
+- 작업 순서 (TDD):
+  1. `controllers/order_controller.py` — `create_order(sample_id, customer_name, quantity)` 구현.
+     - 존재하지 않는 시료 ID로 주문하면 에러 (`prd.md`: "시스템에 등록된 시료만 주문 가능").
+     - 수량이 1 이상의 정수가 아니면 에러.
+     - 주문번호는 `ORD-YYYYMMDD-NNNN` 형식으로 자동 생성 (당일 주문 건수 기준 순번).
+     - 생성 직후 상태는 `RESERVED`.
+     - 테스트 먼저 (`tests/test_order_controller.py`).
+  2. `views/order_view.py` — 시료 ID / 고객명 / 수량을 입력받아 `create_order` 호출, 결과(주문번호/상태) 출력. TDD 없이 구현 후 수동 확인.
+- 커밋 단위:
+  1. `[test] Phase 2: 시료 주문 생성 컨트롤러 테스트 작성`
+  2. `[feat] Phase 2: 시료 주문 생성 컨트롤러 구현`
+  3. `[feat] Phase 2: 시료 주문 콘솔 View 구현`
+- 완료 기준: `pytest tests/test_order_controller.py` 통과, 콘솔에서 `[2] 시료 주문` 메뉴가 정상 동작, `feature/시료-주문`을 `main`에 merge.
+
+### Phase 3~6 — 나머지 4개 기능 (Controller + View)
+
+_Phase 1/2와 같은 형식으로, 주문 승인/거절 → 모니터링 → 생산 라인 조회 → 출고 처리 순서로 하나씩 이어서 작성_
 
 ### Phase 7 — 메인 메뉴 통합
 
