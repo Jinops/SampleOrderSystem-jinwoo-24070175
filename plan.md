@@ -65,7 +65,7 @@
   2. `[feat] Phase 1: 시료 관리 컨트롤러 구현`
   3. `[feat] Phase 1: 시료 관리 콘솔 View 구현`
 - 완료 기준: `pytest tests/test_sample_controller.py` 통과, 콘솔에서 `[1] 시료 관리` 메뉴가 정상 동작, `feature/시료-관리`를 `main`에 merge.
-- **주의**: 이번 라운드는 구현(Action)까지만 진행하고 `main` merge는 보류한다 (사용자 지시).
+- **완료됨** — `main`에 merge 완료 (2026-07-15).
 
 ### Phase 2 — 시료 주문 (Controller + View)
 
