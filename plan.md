@@ -180,17 +180,16 @@
 
 - 별도 feature 브랜치 없이 `main`에서 직접 실행 (코드 변경이 아닌 검증 작업이므로).
 - `harness-verify`: 전체 `models`/`controllers`/`views`가 `prd.md`/`spec.md`와 일치하는지, 전체 테스트가 통과하는지 확인.
-- `plan-verify`: Phase 5~7의 계획 대비 실제 진행(브랜치/커밋/완료기준)을 확인 (Phase 0~4는 이미 한 차례 검증 완료, `harness-log.md` 참고).
-- 결과를 `harness-log.md`에 이어서 기록.
+- `plan-verify`: Phase 5~7의 계획 대비 실제 진행(브랜치/커밋/완료기준)을 확인 (Phase 0~4는 이미 한 차례 검증 완료).
 - FAIL 항목이 있으면 Phase 9에서 정리한다.
-- **완료됨** — harness-verify에서 생산완료 처리가 시간 경과를 검증하지 않는 spec 위반(FAIL) 1건 발견 → `feature/생산완료-시간검증`에서 즉시 수정(TDD) 후 재검증 PASS. plan-verify(Phase 5~7)는 PASS. 상세 내역은 `harness-log.md` "2026-07-15 — Phase 5~7" 참고.
+- **완료됨** — harness-verify에서 생산완료 처리가 시간 경과를 검증하지 않는 spec 위반(FAIL) 1건 발견 → `feature/생산완료-시간검증`에서 즉시 수정(TDD) 후 재검증 PASS. plan-verify(Phase 5~7)는 PASS.
 
 ### Phase 9 — CleanCode 정리
 
 목표: Harness 검증에서 발견된 이슈와 그 외 가독성/중복 문제를 정리한다.
 
 - 별도 feature 브랜치 없이 `main`에서 직접 작업 (기능 추가가 아닌 정리이므로 `[refact]`/`[chore]` 커밋 위주).
-- 확인된 정리 대상: `models/sample.py`의 미사용 `search_samples` 함수 제거 (harness-log.md 2026-07-15 기록 참고).
+- 확인된 정리 대상: `models/sample.py`의 미사용 `search_samples` 함수 제거.
 - Phase 8에서 새로 발견된 이슈가 있으면 함께 정리.
 - 정리 후 전체 테스트가 여전히 통과하는지 재확인.
 - **완료됨** — 미사용 `search_samples`(models/sample.py) 및 관련 테스트 제거(커밋 `b0177e6`). Phase 8에서 발견된 생산완료 버그는 별도 `[fix]`로 즉시 수정(위 Phase 8 참고). 전체 테스트 48개 통과 확인.
@@ -211,7 +210,7 @@
   8. 거절(REJECTED) 케이스도 한 번 확인
 - 버그 발견 시 처리: 원인이 되는 계층(model/controller/view)에 TDD로 테스트를 먼저 추가(Red) → 수정(Green) → 커밋. 커밋 메시지는 `[fix] Phase 10: ...` 형식.
 - 완료 기준: 위 8개 시나리오가 `main.py` 상에서 모두 정상 동작하고, `pytest tests/` 전체가 통과.
-- **완료됨** — `main.py`로 시료 2종 등록 → 재고충분/부족 주문 승인(CONFIRMED/PRODUCING 분기) → 거절 → 생산 큐 FIFO 조회·진행률 → 생산완료(정상)/생산완료(시간 미충족 에러) → 모니터링(재고 부족/여유 분류) → 출고(RELEASE) 전체 흐름을 한 번에 실행. 최종 주문 상태(RELEASE/CONFIRMED/PRODUCING/REJECTED)와 재고값을 직접 조회해 계산이 모두 정확함을 확인. 새로 발견된 버그 없음 — 상세 내역은 `harness-log.md` 참고.
+- **완료됨** — `main.py`로 시료 2종 등록 → 재고충분/부족 주문 승인(CONFIRMED/PRODUCING 분기) → 거절 → 생산 큐 FIFO 조회·진행률 → 생산완료(정상)/생산완료(시간 미충족 에러) → 모니터링(재고 부족/여유 분류) → 출고(RELEASE) 전체 흐름을 한 번에 실행. 최종 주문 상태(RELEASE/CONFIRMED/PRODUCING/REJECTED)와 재고값을 직접 조회해 계산이 모두 정확함을 확인. 새로 발견된 버그 없음.
 
 ### Phase 11 — 사용성 개선 (시각화, UX 개선 등)
 
