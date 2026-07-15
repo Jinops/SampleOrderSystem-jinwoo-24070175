@@ -163,14 +163,32 @@
 
 ### Phase 7 — 메인 메뉴 통합
 
-_6개 기능 완료 후 작성_
+목표: 6개 기능 View를 하나의 실행 가능한 콘솔 프로그램(`main.py`)으로 묶는다 (`prd.md` 3장/5장 메인 메뉴).
 
-- 메모(Phase 1에서 발견): Windows 콘솔 기본 코드페이지에서 한글 입출력이 깨지는 문제가 있었음(`PYTHONIOENCODING=utf-8`로 해결 확인). `main.py` 진입점에서 `sys.stdout.reconfigure(encoding="utf-8")` / `sys.stdin.reconfigure(encoding="utf-8")` 처리 필요.
+- 브랜치: `feature/메뉴통합`
+- 작업 순서:
+  1. `main.py` — 시스템 현황(등록 시료 수/총 재고/전체 주문 수/생산라인 대기 건수) 출력 + `[1]~[6]`, `[0] 종료` 메뉴 라우팅 루프. 각 메뉴는 대응하는 `views.*.run()`을 호출.
+  2. Phase 1에서 발견한 인코딩 이슈 해결: 진입점에서 `sys.stdout.reconfigure(encoding="utf-8")` / `sys.stdin.reconfigure(encoding="utf-8")` 처리.
+  3. 단순 라우팅/출력 로직이라 TDD 없이 구현 후 전체 메뉴를 한 바퀴 수동으로 순회하며 확인.
+- 커밋 단위:
+  1. `[feat] Phase 7: main.py 메인 메뉴 통합 구현`
+- 완료 기준: `python main.py` 실행 후 6개 메뉴 모두 진입 가능, 콘솔 인코딩 문제 없음, `feature/메뉴통합`을 `main`에 merge.
 
 ### Phase 8 — Harness(검증) 단계
 
-_문서-코드 정합성 검사 + 테스트 검증 subagent 실행 계획 작성_
+목표: Phase 0~7 전체에 대해 `harness-verify`/`plan-verify` Skill을 한 번 더 전체적으로 실행해 최종 확인한다.
+
+- 별도 feature 브랜치 없이 `main`에서 직접 실행 (코드 변경이 아닌 검증 작업이므로).
+- `harness-verify`: 전체 `models`/`controllers`/`views`가 `prd.md`/`spec.md`와 일치하는지, 전체 테스트가 통과하는지 확인.
+- `plan-verify`: Phase 5~7의 계획 대비 실제 진행(브랜치/커밋/완료기준)을 확인 (Phase 0~4는 이미 한 차례 검증 완료, `harness-log.md` 참고).
+- 결과를 `harness-log.md`에 이어서 기록.
+- FAIL 항목이 있으면 Phase 9에서 정리한다.
 
 ### Phase 9 — CleanCode 정리
 
-_Harness 결과를 바탕으로 리팩토링 계획 작성_
+목표: Harness 검증에서 발견된 이슈와 그 외 가독성/중복 문제를 정리한다.
+
+- 별도 feature 브랜치 없이 `main`에서 직접 작업 (기능 추가가 아닌 정리이므로 `[refact]`/`[chore]` 커밋 위주).
+- 확인된 정리 대상: `models/sample.py`의 미사용 `search_samples` 함수 제거 (harness-log.md 2026-07-15 기록 참고).
+- Phase 8에서 새로 발견된 이슈가 있으면 함께 정리.
+- 정리 후 전체 테스트가 여전히 통과하는지 재확인.
