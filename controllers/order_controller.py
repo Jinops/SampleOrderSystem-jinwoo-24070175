@@ -1,4 +1,5 @@
 from datetime import datetime
+from math import ceil
 from pathlib import Path
 
 from models.enums import OrderStatus
@@ -64,6 +65,9 @@ def approve_order(order_id: str, data_dir: Path = DEFAULT_DATA_DIR) -> Order:
         save_sample(sample, data_dir=data_dir)
         order.status = OrderStatus.CONFIRMED
     else:
+        shortage = order.quantity - sample.stock
+        order.shortage = shortage
+        order.actual_qty = ceil(shortage / sample.yield_rate)
         order.status = OrderStatus.PRODUCING
 
     save_order(order, data_dir=data_dir)
