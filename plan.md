@@ -42,14 +42,43 @@
   3. `models/order.py` — `Order` dataclass(`order_id`/`sample_id`/`customer_name`/`quantity`/`status`/`created_at`) 정의 + `data/orders.json` 대상 CRUD 함수(`list_orders`, `get_order`, `save_order`).
      - 테스트 먼저 (`tests/test_order_model.py`): 생성 시 `status`가 `RESERVED`로 저장/복원되는지, `created_at`이 ISO 8601로 직렬화·역직렬화되는지, 상태값 변경 후 재조회 시 반영되는지.
   4. 파일이 없을 때(첫 실행) 빈 리스트로 시작하는 경우에 대한 테스트 + 구현.
-- 커밋 단위 (기능 단위로 잘게, `CLAUDE.md` 규칙):
-  1. `[test] Sample 모델 CRUD 테스트 작성`
-  2. `[feat] Sample 모델 및 JSON CRUD 구현`
-  3. `[test] Order 모델 CRUD 테스트 작성`
-  4. `[feat] Order 모델 및 JSON CRUD 구현`
-  5. (필요 시) `[refact] Model 계층 정리`
+- 커밋 단위 (기능 단위로 잘게, `CLAUDE.md` 규칙 — Phase 표기 포함):
+  1. `[test] Phase 0: Sample 모델 CRUD 테스트 작성`
+  2. `[feat] Phase 0: Sample 모델 및 JSON CRUD 구현`
+  3. `[test] Phase 0: Order 모델 CRUD 테스트 작성`
+  4. `[feat] Phase 0: Order 모델 및 JSON CRUD 구현`
+  5. (필요 시) `[refact] Phase 0: Model 계층 정리`
 - 완료 기준: `pytest tests/test_sample_model.py tests/test_order_model.py`가 전부 통과, `feature/model-layer`를 `main`에 merge.
+- **완료됨** — `main`에 merge 완료 (2026-07-15).
 
-### Phase 1~5
+### Phase 1 — 시료 관리 (Controller + View)
 
-_Model 계층 완료 후 이어서 작성 (기능별 Controller+View 6개, 메뉴 통합, Harness, CleanCode)_
+목표: Phase 0의 `models/sample.py` 위에 "시료 등록 / 조회 / 검색" 기능을 완성한다 (`prd.md` 5.1).
+
+- 브랜치: `feature/시료-관리`
+- 작업 순서 (TDD):
+  1. `controllers/sample_controller.py` — `register_sample()`, `list_samples()`, `search_samples()` 구현. 중복 시료 ID 등록 방지, 수율(`yield_rate`)이 0~1 범위인지 등 입력 검증 포함.
+     - 테스트 먼저 (`tests/test_sample_controller.py`): 정상 등록/조회/검색, 중복 ID 등록 시 에러 처리, 수율 범위를 벗어난 값 등록 시 에러 처리.
+  2. `views/sample_view.py` — 하위 메뉴 `[1] 시료 등록 / [2] 시료 목록 / [3] 시료 검색 / [0] 뒤로` 출력, 입력 받아 Controller 호출, 결과를 표 형태로 출력(`prd.md` 예시 UI 참고). 단순 입출력이라 TDD 없이 구현 후 수동 확인.
+- 커밋 단위:
+  1. `[test] Phase 1: 시료 등록/조회/검색 컨트롤러 테스트 작성`
+  2. `[feat] Phase 1: 시료 관리 컨트롤러 구현`
+  3. `[feat] Phase 1: 시료 관리 콘솔 View 구현`
+- 완료 기준: `pytest tests/test_sample_controller.py` 통과, 콘솔에서 `[1] 시료 관리` 메뉴가 정상 동작, `feature/시료-관리`를 `main`에 merge.
+- **주의**: 이번 라운드는 구현(Action)까지만 진행하고 `main` merge는 보류한다 (사용자 지시).
+
+### Phase 2~6 — 나머지 5개 기능 (Controller + View)
+
+_Phase 1과 같은 형식으로, 시료 주문 → 주문 승인/거절 → 모니터링 → 생산 라인 조회 → 출고 처리 순서로 하나씩 이어서 작성_
+
+### Phase 7 — 메인 메뉴 통합
+
+_6개 기능 완료 후 작성_
+
+### Phase 8 — Harness(검증) 단계
+
+_문서-코드 정합성 검사 + 테스트 검증 subagent 실행 계획 작성_
+
+### Phase 9 — CleanCode 정리
+
+_Harness 결과를 바탕으로 리팩토링 계획 작성_
