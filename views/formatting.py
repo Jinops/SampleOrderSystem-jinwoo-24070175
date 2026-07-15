@@ -1,6 +1,7 @@
 import re
 
 RESET = "\033[0m"
+HEADER_COLOR = "\033[38;5;208m"  # 주황 (256색, 기존 상태값 색상과 겹치지 않음)
 
 _COLORS = {
     "RESERVED": "\033[33m",  # 노랑
@@ -33,9 +34,10 @@ def _pad(text: str, width: int) -> str:
 
 
 def print_section_header(title: str, width: int = 60) -> None:
-    print("\n" + "=" * width)
+    divider = f"{HEADER_COLOR}{'=' * width}{RESET}"
+    print("\n" + divider)
     print(f"  {title}")
-    print("=" * width)
+    print(divider)
 
 
 def print_table(headers: list[str], rows: list[list[str]], widths: list[int]) -> None:
