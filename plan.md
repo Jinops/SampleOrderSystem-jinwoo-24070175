@@ -120,9 +120,35 @@
   3. `[feat] Phase 4: 모니터링 콘솔 View 구현`
 - 완료 기준: `pytest tests/test_monitoring.py` 통과, 콘솔에서 `[4] 모니터링` 메뉴가 정상 동작, `feature/모니터링`을 `main`에 merge.
 
-### Phase 5~6 — 나머지 2개 기능 (Controller + View)
+### Phase 5 — 생산 라인 조회 (Controller + View)
 
-_Phase 1~4와 같은 형식으로, 생산 라인 조회 → 출고 처리 순서로 하나씩 이어서 작성_
+목표: `PRODUCING` 주문의 생산 큐를 조회하고, 생산 완료 처리를 한다 (`prd.md` 5.5, `spec.md` 4.2).
+
+- 브랜치: `feature/생산라인`
+- 설계 결정:
+  - `models/order.py`의 `Order`에 `shortage`(부족분), `actual_qty`(실 생산량), `production_started_at`(생산 시작 시각) 3개 필드를 nullable로 추가한다.
+  - `shortage`/`actual_qty`는 승인 시점(`controllers/order_controller.approve_order`가 `PRODUCING`으로 전환하는 순간)에 계산해서 주문에 저장한다 — 이후 재고가 바뀌어도 이 값은 고정.
+  - 생산 큐는 `status == PRODUCING`인 주문을 `created_at` 기준 FIFO로 정렬한 것. 맨 앞 주문이 "현재 처리 중"이며, 처음 조회되는 시점에 `production_started_at`을 기록한다(없으면 지금 시각으로 설정).
+  - 진행률(progress bar)은 `spec.md`에서 정한 대로 표시 전용이며, 실제 재고/상태 반영과는 무관하다. 생산 완료 처리는 시간 경과를 자동으로 검사하지 않고, 담당자가 메뉴에서 "생산완료 처리"를 실행하는 시점에 큐 맨 앞 주문 1건을 완료 처리한다(콘솔 데모 특성상 실시간 대기를 강제하지 않음). `PRODUCING`과 `CONFIRMED` 사이에는 다른 상태가 없으므로 "중간에 일부만 완료"라는 상태 자체가 존재하지 않는다.
+- 작업 순서 (TDD):
+  1. `models/order.py` 필드 추가 + 직렬화 — 테스트 먼저 (`tests/test_order_model.py`에 케이스 추가).
+  2. `controllers/order_controller.py`의 `approve_order`가 `PRODUCING` 전환 시 `shortage`/`actual_qty`를 계산해 저장하도록 수정 — 테스트 먼저 (`tests/test_order_approval.py`에 케이스 추가).
+  3. `controllers/production_controller.py`:
+     - `get_production_queue()` — FIFO 큐 + 맨 앞 주문의 진행률/완료 예정 시각 + 나머지 주문의 누적 예상 완료 시각.
+     - `complete_current_production()` — 큐 맨 앞 주문을 완료 처리 (재고 `actual_qty`만큼 증가 후 주문 수량만큼 차감, 상태 `PRODUCING → CONFIRMED`). 큐가 비어있으면 에러.
+     - 테스트 먼저 (`tests/test_production.py`).
+  4. `views/production_view.py` — 큐 조회 화면(진행률 바 텍스트 출력) + 완료 처리 메뉴. TDD 없이 구현 후 수동 확인.
+- 커밋 단위:
+  1. `[test] Phase 5: Order에 shortage/actual_qty/production_started_at 필드 테스트 작성`
+  2. `[feat] Phase 5: Order 모델 필드 추가 및 승인 시 shortage/actual_qty 계산 반영`
+  3. `[test] Phase 5: 생산 큐 조회 및 완료 처리 컨트롤러 테스트 작성`
+  4. `[feat] Phase 5: 생산 라인 컨트롤러 구현`
+  5. `[feat] Phase 5: 생산 라인 콘솔 View 구현`
+- 완료 기준: `pytest tests/test_production.py` 통과, 콘솔에서 `[5] 생산라인 조회` 메뉴가 정상 동작, `feature/생산라인`을 `main`에 merge.
+
+### Phase 6 — 출고 처리 (Controller + View)
+
+_Phase 1~5와 같은 형식으로 이어서 작성_
 
 ### Phase 7 — 메인 메뉴 통합
 
