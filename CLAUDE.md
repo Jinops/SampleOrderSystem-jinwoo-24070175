@@ -34,3 +34,14 @@
 - `prd.md` — 제품 요구사항 (무엇을 만들 것인가)
 - `spec.md` — 기술 스펙 (아키텍처, 데이터 모델 등)
 - `plan.md` — 구현 계획 (거시적 + Phase별)
+
+## 참고 가능한 PoC 레포 (필수 아님)
+
+아래 4개는 동일 과제로 만든 PoC 레포로, 필요 시 구현 아이디어를 참고할 수 있다. (참고는 선택 사항이며 반드시 따를 필요는 없다.)
+
+| Repository | PoC 내용 |
+|---|---|
+| https://github.com/Jinops/ConsoleMVC-jinwoo-24070175 | MVC 스켈레톤 코드를 POC한 레포 |
+| https://github.com/Jinops/DataPersistence-jinwoo-24070175 | 데이터 영속성 처리를 POC한 레포 |
+| https://github.com/Jinops/DataMonitor-jinwoo-24070175 | 데이터 모니터링 Tool을 POC한 레포 |
+| https://github.com/Jinops/DummyDataGenerator-jinwoo-24070175 | Dummy 데이터 생성 Tool을 POC한 레포 |
